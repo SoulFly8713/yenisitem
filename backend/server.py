@@ -197,13 +197,13 @@ app.add_middleware(
     allow_credentials=True,
     allow_origins=[
         "https://yenisitem.vercel.app", 
-        "https://www.yenisitem.vercel.app",
+        "https://yenisitem-production.up.railway.app",
         "http://localhost:3000",
-        "http://127.0.0.1:3000"
-    ],
+    ], 
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 logging.basicConfig(level=logging.INFO)
 
