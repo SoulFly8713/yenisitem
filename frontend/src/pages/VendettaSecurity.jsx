@@ -91,7 +91,6 @@ const VendettaSecurity = () => {
     },
     {
       q: "Hangi ödeme yöntemleri geçerli?",
-      // BURAYA EKLEDİK:
       a: (
         <span>
           Şimdilik işlemlerimizi{' '}

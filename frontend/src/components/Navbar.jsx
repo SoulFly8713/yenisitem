@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Shield, LogOut, FileText, MessageSquare, Mail } from 'lucide-react'; // ShoppingBag yerine Shield kullanabiliriz
+import { Menu, X, Shield, LogOut, FileText, MessageSquare, Mail, Settings } from 'lucide-react';
 
 const Navbar = ({ isAuthenticated, isAdmin, onLogout }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -9,83 +9,81 @@ const Navbar = ({ isAuthenticated, isAdmin, onLogout }) => {
   // Aktif sayfa kontrolü
   const isActive = (path) => location.pathname === path;
 
+  // Linkler için ortak stil
+  const NavItem = ({ to, icon: Icon, label }) => (
+    <Link 
+      to={to} 
+      className={`relative group flex items-center gap-2 py-2 text-sm font-bold uppercase tracking-wider transition-colors ${
+        isActive(to) ? 'text-red-500' : 'text-gray-400 hover:text-white'
+      }`}
+    >
+      <Icon size={16} />
+      {label}
+      <span className={`absolute bottom-0 left-0 h-0.5 bg-red-600 transition-all duration-300 ease-out ${
+        isActive(to) ? 'w-full' : 'w-0 group-hover:w-full'
+      }`}></span>
+    </Link>
+  );
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
-          {/* LOGO VE MARKA ALANI */}
+          {/* LOGO VE MARKA ALANI (ARTIK SABİT) */}
           <Link to="/" className="flex-shrink-0 flex items-center gap-3 group">
-            {/* Logo Resmi (rounded-full yerine rounded-lg) */}
             <img 
               src="/vendetta-logo.png" 
-              alt="Vendetta Security Logo" 
-              className="w-10 h-10 object-contain transition-transform group-hover:scale-105 rounded-lg" // Burayı değiştirdik
+              alt="Vendetta Store Logo" 
+              className="w-10 h-10 object-contain transition-transform group-hover:scale-105 rounded-md" 
               onError={(e) => { e.target.style.display = 'none'; }} 
             />
-            
             <span className="font-mono text-xl font-bold tracking-tighter text-white group-hover:text-red-500 transition-colors">
-              VENDETTA STORE {/* Burayı değiştirdik */}
+              VENDETTA STORE
             </span>
           </Link>
           
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-6">
             
-            {/* Navigasyon Linkleri - Animasyonlu Çizgi Eklendi */}
-            <Link to="/" className={`relative text-sm font-bold uppercase tracking-wider transition-colors flex items-center gap-1 pb-1 group ${
-                isActive('/') ? 'text-red-500' : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              <FileText size={16} /> PROJELER
-              <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-500 transition-all duration-300 ${isActive('/') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-75'}`}></span>
-            </Link>
+            <NavItem to="/" icon={FileText} label="PROJELER" />
+            <NavItem to="/vendetta-security" icon={Shield} label="VENDETTA SECURİTY" />
+            <NavItem to="/testimonials" icon={MessageSquare} label="YORUMLAR" />
+            <NavItem to="/contact" icon={Mail} label="İLETİŞİM" />
             
-            <Link to="/vendetta-security" className={`relative text-sm font-bold uppercase tracking-wider transition-colors flex items-center gap-1 pb-1 group ${
-                isActive('/vendetta-security') ? 'text-red-500' : 'text-gray-400 hover:text-red-400'
-              }`}
-            >
-               <Shield size={16} /> VENDETTA SECURİTY {/* ShoppingBag yerine Shield */}
-               <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-500 transition-all duration-300 ${isActive('/vendetta-security') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-75'}`}></span>
-            </Link>
-            
-            <Link to="/testimonials" className={`relative text-sm font-bold uppercase tracking-wider transition-colors flex items-center gap-1 pb-1 group ${
-                isActive('/testimonials') ? 'text-red-500' : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              <MessageSquare size={16} /> YORUMLAR
-              <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-500 transition-all duration-300 ${isActive('/testimonials') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-75'}`}></span>
-            </Link>
-            
-            <Link to="/contact" className={`relative text-sm font-bold uppercase tracking-wider transition-colors flex items-center gap-1 pb-1 group ${
-                isActive('/contact') ? 'text-red-500' : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              <Mail size={16} /> İLETİŞİM
-              <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-500 transition-all duration-300 ${isActive('/contact') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-75'}`}></span>
-            </Link>
-            
-            {/* AUTH ALANI (EKRANA UYGUN DÜZENLENDİ) */}
+            {/* AUTH ALANI */}
             {isAuthenticated ? (
-              <div className="flex items-center gap-2 ml-4">
-                  {/* "GİRİŞ YAPILDI" kaldırıldı */}
-                   
+              <div className="flex items-center gap-3 ml-4 border-l border-white/10 pl-4">
+                  
+                  {/* Ayarlar Butonu */}
+                  <Link 
+                    to="/settings" 
+                    className={`p-2 rounded-md transition-all text-gray-400 hover:text-white hover:bg-white/5 ${isActive('/settings') ? 'text-white bg-white/10' : ''}`}
+                    title="Kullanıcı Ayarları"
+                  >
+                    <Settings size={20} />
+                  </Link>
+
+                  {/* Admin Paneli Butonu */}
                   {isAdmin && (
-                    <Link to="/admin" className={`font-mono text-sm border-2 px-3 py-2 rounded-lg transition-all ${
-                      isActive('/admin') ? 'bg-yellow-600/20 border-yellow-600 text-yellow-400' : 'bg-transparent border-yellow-600/50 text-yellow-500 hover:bg-yellow-600/10'
-                     }`}>
+                    <Link to="/admin" className={`font-mono text-sm border border-yellow-500/50 text-yellow-500 px-4 py-2 rounded-md hover:bg-yellow-500/10 transition-all uppercase tracking-wider ${
+                      isActive('/admin') ? 'bg-yellow-500/10' : ''
+                    }`}>
                        ADMİN PANELİ
                     </Link>
                   )}
                    
-                  <button onClick={onLogout} className="bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase hover:bg-red-700 transition-all flex items-center gap-1">
+                  {/* Çıkış Yap Butonu */}
+                  <button onClick={onLogout} className="bg-red-600 text-white px-5 py-2 rounded-md text-xs font-bold uppercase tracking-wider hover:bg-red-700 transition-all flex items-center gap-2">
                     <LogOut size={16} /> ÇIKIŞ YAP
                   </button>
                 </div>
             ) : (
-              <Link to="/login" className="px-4 py-2 bg-white text-black text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-gray-200 transition-all">
-                GİRİŞ YAP
-              </Link>
+              <div className="ml-4 border-l border-white/10 pl-4">
+                <Link to="/login" className="px-6 py-2 bg-white text-black text-xs font-bold uppercase tracking-wider rounded-md hover:bg-gray-200 transition-all">
+                  GİRİŞ YAP
+                </Link>
+              </div>
             )}
           </div>
 
@@ -101,21 +99,22 @@ const Navbar = ({ isAuthenticated, isAdmin, onLogout }) => {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-black/90 border-t border-white/10 absolute w-full pb-4">
-          <div className="px-4 py-4 space-y-3">
+        <div className="md:hidden bg-black border-t border-white/10 absolute w-full pb-4 shadow-xl">
+          <div className="px-4 py-4 space-y-2">
             {[
               { path: '/', label: 'Projeler' },
-              { path: '/vendetta-security', label: 'Vendetta Security' },
+              { path: '/vendetta-security', label: 'VENDETTA SECURİTY' },
               { path: '/testimonials', label: 'Yorumlar' },
               { path: '/contact', label: 'İletişim' },
+              { path: '/settings', label: 'Hesap Ayarları' },
               ...(isAdmin ? [{ path: '/admin', label: 'Admin Panel' }] : []),
             ].map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block text-sm font-bold uppercase tracking-wider p-2 rounded-lg transition-colors ${
-                  isActive(item.path) ? 'bg-white text-black' : 'text-gray-300 hover:bg-white/5'
+                className={`block text-sm font-bold uppercase tracking-wider p-3 rounded-md transition-colors ${
+                  isActive(item.path) ? 'bg-white text-black' : 'text-gray-300 hover:bg-white/10'
                 }`}
               >
                 {item.label}
@@ -128,7 +127,7 @@ const Navbar = ({ isAuthenticated, isAdmin, onLogout }) => {
                   onLogout();
                   setMobileMenuOpen(false);
                 }}
-                className="w-full text-left mt-3 px-2 py-2 text-sm font-bold uppercase tracking-wider text-red-400 border border-red-400/20 rounded-lg hover:bg-red-500/10"
+                className="w-full text-left mt-4 px-3 py-3 text-sm font-bold uppercase tracking-wider text-red-400 border border-red-500/30 rounded-md hover:bg-red-500/10"
               >
                 ÇIKIŞ YAP
               </button>
@@ -136,9 +135,9 @@ const Navbar = ({ isAuthenticated, isAdmin, onLogout }) => {
               <Link
                 to="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-left block mt-3 px-2 py-2 text-sm font-bold uppercase tracking-wider bg-white/10 text-white rounded-lg hover:bg-white/20"
+                className="w-full text-center block mt-4 px-3 py-3 text-sm font-bold uppercase tracking-wider bg-white text-black rounded-md hover:bg-gray-200"
               >
-                Giriş Yap
+                GİRİŞ YAP
               </Link>
             )}
           </div>
