@@ -233,7 +233,6 @@ async def send_contact_message(msg: ContactMessage):
 async def root(): return {"message": "API Çalışıyor"}
 
 app.include_router(api_router)
-app.add_middleware(CORSMiddleware, allow_credentials=True, allow_origins=["https://yenisitem.vercel.app", "http://localhost:3000"], allow_methods=["*"], allow_headers=["*"])
 logging.basicConfig(level=logging.INFO)
 
 @app.on_event("shutdown")
@@ -241,4 +240,4 @@ async def shutdown_db_client(): client.close()
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("server:app", host="127.0.0.1", port=8000, reload=False)
+    uvicorn.run("server:app", host="127.0.0.1", port=8000, reload=True)
